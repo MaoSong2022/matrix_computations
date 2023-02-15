@@ -1,3 +1,3 @@
 # Introduction
 
-Implementations of algorithms in <<Matrix Computations>>.
+Implementations of algorithms in \<\<Matrix Computations\>\>.
