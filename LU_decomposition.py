@@ -3,6 +3,23 @@ from typing import Tuple
 
 
 def gaussian_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Use the gaussian transformation to compute the LU decompositions of A
+
+    Args:
+        A (np.ndarray): an square invertible matrix of size n-by-n
+
+    Raises:
+        ValueError: raises if A is not a square matrix.
+        ZeroDivisionError: raises if A is not invertible
+
+    Returns:
+        Tuple[np.ndarray, np.ndarray]: LU decomposition of matrix A
+        L (np.ndarray): an square unit lower triangular matrix  of size n-by-n.
+        U (np.ndarray): an square upper triangular matrix  of size n-by-n.
+
+    Reference:
+        <<Matrix Computations>> 4-th Edition, Section 3.2.1~3.2.6
+    """
     m, n = A.shape
 
     if m != n:
@@ -15,9 +32,6 @@ def gaussian_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
             raise ZeroDivisionError("pivot should not be zero")
         tau = np.zeros((n, 1))
         tau[k+1:, 0] = A[k+1:, k] / A[k, k]
-        # print(tau.shape)
-        # print(I[:, k:k+1].T.shape)
-        # print((tau @ I[:, k:k+1].T).shape)
         M = np.eye(n) - tau @ I[:, k:k+1].T
         A = M @ A
         L += tau @ I[:, k:k+1].T
@@ -25,15 +39,22 @@ def gaussian_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     return (L, A)
 
 def out_product_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    """use the out product to compute the LU decomposition of matrix A
+    """Use the out product to compute the LU decompositions of A
 
     Args:
-        A (np.ndarray): Objective matrix of size m by n, A is assumed to be 
-        that A(1:k, 1:k) is non-singular for k = 1: n-1
+        A (np.ndarray): an square invertible matrix of size n-by-n
+
+    Raises:
+        ValueError: raises if A is not a square matrix.
+        ZeroDivisionError: raises if A is not invertible
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]: LU decomposition of A,
-        [L, U], L is unit lower triangular, U is upper triangular.
+        Tuple[np.ndarray, np.ndarray]: LU decomposition of matrix A
+        L (np.ndarray): an square unit lower triangular matrix  of size n-by-n.
+        U (np.ndarray): an square upper triangular matrix  of size n-by-n.
+
+    Reference:
+        <<Matrix Computations>> 4-th Edition, Algorithm 3.2.1
     """
     m, n = A.shape
 
