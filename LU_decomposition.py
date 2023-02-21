@@ -75,5 +75,42 @@ def out_product_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     return (L, U)
 
 
+def gaxpy_LU(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Use the gaxpy method to find the LU decomposition of A
 
+    Args:
+        A (np.ndarray): an square invertible matrix of size n-by-n
 
+    Raises:
+        ValueError: raises if A is not a square matrix.
+
+    Returns:
+        Tuple[np.ndarray, np.ndarray]: LU decomposition of matrix A
+        L (np.ndarray): an square unit lower triangular matrix  of size n-by-n.
+        U (np.ndarray): an square upper triangular matrix  of size n-by-n.
+
+    Reference:
+        <<Matrix Computations>> 4-th Edition, Algorithm 3.2.2
+    """
+    m, n = A.shape
+
+    if m != n:
+        raise ValueError("LU decomposition is only valid for square matrix.")
+
+    L: np.ndarray = np.eye(n)
+    U: np.ndarray = np.zeros((n, n))
+
+    v: np.ndarray = np.zeros(n)
+    for i in range(n):
+        if i == 0:
+            v = A[:, 0: 1]
+        else:
+            a = A[:, i: i+1]
+            z = np.linalg.solve(L[:i, :i], a[:i])
+            U[:i, i:i+1] = z
+            v[i:] = a[i:] - L[i:, :i] @ z
+        
+        U[i, i] = v[i]
+        L[i + 1:, i:i+1] = v[i+1:] / v[i]
+
+    return (L, U)

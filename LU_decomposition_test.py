@@ -2,7 +2,7 @@ import scipy.linalg as la
 import unittest
 import numpy as np
 
-from LU_decomposition import out_product_lu, gaussian_lu
+from LU_decomposition import out_product_lu, gaussian_lu, gaxpy_LU
 
 class TestLUDecomposition(unittest.TestCase):
     def setUp(self):
@@ -39,7 +39,11 @@ class TestLUDecomposition(unittest.TestCase):
         np.testing.assert_array_almost_equal(self.real_L, test_L, decimal=3)
         np.testing.assert_array_almost_equal(self.real_U, test_U, decimal=3)
 
-
+    def test_gaxypy(self):
+        test_L, test_U = gaxpy_LU(self.P.T @ self.B)
+        np.testing.assert_array_almost_equal(test_L @ test_U, self.P.T @ self.A, decimal=3)
+        np.testing.assert_array_almost_equal(self.real_L, test_L, decimal=3)
+        np.testing.assert_array_almost_equal(self.real_U, test_U, decimal=3)
 
 if __name__ == '__main__':
     unittest.main()
