@@ -3,6 +3,7 @@ import unittest
 import numpy as np
 
 from LU_decomposition import out_product_lu, gaussian_lu, gaxpy_LU
+from LU_decomposition import rectangular_lu
 
 class TestLUDecomposition(unittest.TestCase):
     def setUp(self):
@@ -44,6 +45,25 @@ class TestLUDecomposition(unittest.TestCase):
         np.testing.assert_array_almost_equal(test_L @ test_U, self.P.T @ self.A, decimal=3)
         np.testing.assert_array_almost_equal(self.real_L, test_L, decimal=3)
         np.testing.assert_array_almost_equal(self.real_U, test_U, decimal=3)
+
+    def test_rectangular1(self):
+        A = np.array([[1, 2], [3, 4], [5, 6]])
+        real_L = np.array([[1, 0], [3, 1], [5, 2]])
+        real_U = np.array([[1, 2], [0, -2]])
+        test_L, test_U = rectangular_lu(A.copy())
+        np.testing.assert_array_almost_equal(test_L @ test_U, A, decimal=3)
+        np.testing.assert_array_almost_equal(real_L, test_L, decimal=3)
+        np.testing.assert_array_almost_equal(real_U, test_U, decimal=3)
+
+    def test_rectangular2(self):
+        A = np.array([[1, 2, 3], [4, 5, 6]])
+        real_L = np.array([[1, 0], [4, 1]])
+        real_U = np.array([[1, 2, 3], [0, -3, -6]])
+        test_L, test_U = rectangular_lu(A.copy())
+        np.testing.assert_array_almost_equal(test_L @ test_U, A, decimal=3)
+        np.testing.assert_array_almost_equal(real_L, test_L, decimal=3)
+        np.testing.assert_array_almost_equal(real_U, test_U, decimal=3)
+
 
 if __name__ == '__main__':
     unittest.main()

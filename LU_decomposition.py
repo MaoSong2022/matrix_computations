@@ -114,3 +114,76 @@ def gaxpy_LU(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         L[i + 1:, i:i+1] = v[i+1:] / v[i]
 
     return (L, U)
+
+
+def rectangular_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Use the out product method to find the LU decomposition of matrix A
+
+    Args:
+        A (np.ndarray): a rectangular matrix of size m-by-n
+
+    Raises:
+        ZeroDivisionError: raises if A[:k, :k] for some 1 <= k <= min(m, n)
+
+    Returns:
+        Tuple[np.ndarray, np.ndarray]: LU decomposition of matrix A
+        L (np.ndarray): an square unit lower triangular matrix  of size m-by-r.
+        U (np.ndarray): an square upper triangular matrix  of size r-by-n.
+        where r = min(m, n).
+    """
+    m, n = A.shape
+
+    if m == n:
+        return out_product_lu(A)
+    elif m > n:
+        for i in range(n):
+            pivot = A[i, i]
+            # check if the pivot is non-zero, equivalent to A is invertible.
+            if abs(pivot) <= 1e-8:
+                raise ZeroDivisionError("pivot should not be zero")
+            A[i+1:, i:i+1] = A[i+1:, i:i+1] / pivot
+            if i < n:
+                A[i+1:, i+1:] = A[i+1:, i+1:] - A[i+1:, i:i+1] @ A[i:i+1, i+1:]
+        L: np.ndarray = np.eye(m)[:, :n] + np.tril(A, -1)
+        U: np.ndarray = np.triu(A)[:n, :]
+    else: # m < n
+        for i in range(m):
+            pivot = A[i, i]
+            # check if the pivot is non-zero, equivalent to A is invertible.
+            if abs(pivot) <= 1e-8:
+                raise ZeroDivisionError("pivot should not be zero")
+            A[i+1:, i:i+1] = A[i+1:, i:i+1] / pivot
+            A[i+1:, i+1:] = A[i+1:, i+1:] - A[i+1:, i:i+1] @ A[i:i+1, i+1:]
+
+        L: np.ndarray = np.eye(m) + np.tril(A, -1)[:, :m]
+        U: np.ndarray = np.triu(A)
+
+    return (L, U)
+
+
+def recursive_block_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def non_recursive_block_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def partial_pivot_out_product_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def partial_pivot_gaxpy_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def complete_pivot_out_product_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def rook_pivot_out_product_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def complete_pivot_gaxpy_lu(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    pass
