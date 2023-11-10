@@ -1,10 +1,10 @@
 import numpy as np
-import scipy
 from typing import Tuple
 
 
-def power_iteration(A: np.ndarray, max_iterations: int = 100,
-                    v: np.ndarray = None) -> Tuple[float, np.ndarray]:
+def power_iteration(
+    A: np.ndarray, max_iterations: int = 100, v: np.ndarray = None
+) -> Tuple[float, np.ndarray]:
     """Find the maximum eigenvalue and corresponding eigenvector
 
     Args:
@@ -31,9 +31,9 @@ def power_iteration(A: np.ndarray, max_iterations: int = 100,
     return lamb, v
 
 
-def rayleigh_quotient_iteration(A: np.ndarray, max_iterations: int = 100,
-                                v: np.ndarray = None) -> Tuple[float, np.ndarray]:
-    
+def rayleigh_quotient_iteration(
+    A: np.ndarray, max_iterations: int = 100, v: np.ndarray = None
+) -> Tuple[float, np.ndarray]:
     m, n = A.shape
     if m != n:
         raise ValueError("Rayleigh quotient iteration only supports square matrix.")
@@ -56,20 +56,23 @@ def rayleigh_quotient_iteration(A: np.ndarray, max_iterations: int = 100,
     return lamb, v
 
 
-def orthogonal_iteration(A: np.ndarray, k: int = 1, max_iterations: int = 100,
-                         V: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
+def orthogonal_iteration(
+    A: np.ndarray, k: int = 1, max_iterations: int = 100, V: np.ndarray = None
+) -> Tuple[np.ndarray, np.ndarray]:
     m, n = A.shape
     if m != n:
         raise ValueError("Orthogonal iteration only supports square matrix.")
-    
+
     if V is not None:
         if V.shape != (n, k):
-            raise ValueError("The shape of initialization space does not match the input.")
+            raise ValueError(
+                "The shape of initialization space does not match the input."
+            )
     else:
         V = np.random.randn(n, k)
 
     for i in range(max_iterations):
-        Q, R = np.linalg.qr(V, 'reduced')
+        Q, R = np.linalg.qr(V, "reduced")
         Q /= np.linalg.norm(Q, axis=0)
         V = A @ Q
 
