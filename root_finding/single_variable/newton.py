@@ -107,6 +107,16 @@ def false_position(
     return x
 
 
+def newton_multiple_roots(
+    f: Callable[[float], float],
+    df: Callable[[float], float],
+    ddf: Callable[[float], float],
+    x0: float,
+    tol: float = 1e-6,
+) -> float:
+    pass
+
+
 if __name__ == "__main__":
     import math
 
