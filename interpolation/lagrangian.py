@@ -11,6 +11,10 @@ def lagrangian_interpolation(data: np.ndarray, x: np.ndarray) -> np.ndarray:
 
     Returns:
     - np.ndarray: An array of shape (m,) representing the interpolated values at the given points.
+
+    Reference:
+        Burden, Richard L., and J. Douglas Faires. Numerical Analysis. 9th ed.
+        Theorem 3.2
     """
     result = np.zeros_like(x)
     n = data.shape[0]
